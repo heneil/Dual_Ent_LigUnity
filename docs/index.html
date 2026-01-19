@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="LigUnity: A Unified Foundation Model for Virtual Screening and Hit-to-Lead Optimization.">
+  <meta name="keywords" content="LigUnity, Foundation Model, Drug Discovery, Virtual Screening, Hit-to-Lead">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LigUnity: Hierarchical affinity landscape navigation through learning a shared pocket-ligand space</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <style>
+    /* Basic CSS from the template */
+    :root {
+      --bulma-scheme-h: 21;
+      --bulma-scheme-s: 100%;
+      --bulma-scheme-l: 98%;
+      --bulma-primary-h: 217;
+      --bulma-primary-s: 17%;
+      --bulma-primary-l: 33%;
+      --bulma-info-h: 204;
+      --bulma-info-s: 86%;
+      --bulma-info-l: 53%;
+      --bulma-success-h: 141;
+      --bulma-success-s: 53%;
+      --bulma-success-l: 48%;
+      --bulma-warning-h: 48;
+      --bulma-warning-s: 100%;
+      --bulma-warning-l: 67%;
+      --bulma-danger-h: 348;
+      --bulma-danger-s: 86%;
+      --bulma-danger-l: 61%;
+      --bulma-link-h: 217;
+      --bulma-link-s: 71%;
+      --bulma-link-l: 53%;
+      --bulma-text-h: 0;
+      --bulma-text-s: 0%;
+      --bulma-text-l: 29%;
+      --bulma-text-light-h: 0;
+      --bulma-text-light-s: 0%;
+      --bulma-text-light-l: 48%;
+      --bulma-text-strong-h: 0;
+      --bulma-text-strong-s: 0%;
+      --bulma-text-strong-l: 21%;
+      --bulma-background-h: 0;
+      --bulma-background-s: 0%;
+      --bulma-background-l: 96%;
+      --bulma-border-h: 0;
+      --bulma-border-s: 0%;
+      --bulma-border-l: 86%;
+      --bulma-border-hover-h: 0;
+      --bulma-border-hover-s: 0%;
+      --bulma-border-hover-l: 71%;
+      --bulma-border-light-h: 0;
+      --bulma-border-light-s: 0%;
+      --bulma-border-light-l: 93%;
+      --bulma-border-light-hover-h: 0;
+      --bulma-border-light-hover-s: 0%;
+      --bulma-border-light-hover-l: 86%;
+      --bulma-code-h: 0;
+      --bulma-code-s: 0%;
+      --bulma-code-l: 14%;
+      --bulma-code-background-h: 0;
+      --bulma-code-background-s: 0%;
+      --bulma-code-background-l: 96%;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Noto Sans', sans-serif;
+    }
+    .publication-title {
+      font-family: 'Google Sans', sans-serif;
+    }
+    .publication-authors {
+      font-family: 'Google Sans', sans-serif;
+    }
+    .publication-venue {
+      color: #555;
+      font-size: 1rem;
+      font-family: 'Google Sans', sans-serif;
+    }
+    .publication-awards {
+      color: #ff3860;
+      font-size: 1rem;
+      font-family: 'Google Sans', sans-serif;
+      font-weight: 600;
+    }
+    .publication-links {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+    .link-block {
+      display: inline-block;
+      margin-right: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .section {
+      padding: 3rem 1.5rem;
+    }
+    .hero.is-light {
+        background-color: #f5f5f5;
+    }
+    .hero .title {
+        color: #363636;
+    }
+    .hero .subtitle {
+        color: #4a4a4a;
+    }
+    .navbar-item .icon {
+        color: #3273dc;
+    }
+    .author-block {
+      display: inline-block;
+    }
+    .publication-video {
+        border: 1px solid #e5e5e5;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+    .publication-video img {
+        width: 100%;
+        height: auto;
+    }
+    .content h1, .content h2, .content h3, .content h4 {
+        font-family: 'Google Sans', sans-serif;
+        font-weight: 300;
+    }
+    .footer {
+        padding: 3rem 1.5rem 3rem;
+        background-color: #fafafa;
+    }
+    .icon-link i {
+      font-size: 1.5rem;
+      margin: 0 0.5rem;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="icon" href="./static/images/xl.png">
+
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://github.com/IDEA-XL/LigUnity">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">LigUnity: Hierarchical affinity landscape navigation through learning a shared pocket-ligand space</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">Bin Feng<sup>1</sup>,</span>
+            <span class="author-block">Zijing Liu<sup>1</sup>,</span>
+            <span class="author-block">Hao Li<sup>1</sup>,</span>
+            <span class="author-block">Mingjun Yang<sup>2</sup>,</span>
+            <span class="author-block">Junjie Zou<sup>2</sup>,</span>
+            <span class="author-block">He Cao<sup>1</sup>,</span>
+            <span class="author-block">Yu Li<sup>1</sup>,</span>
+            <span class="author-block">Lei Zhang<sup>1</sup>,</span>
+            <span class="author-block">Sheng Wang<sup>3</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>International Digital Economy Academy (IDEA)</span>,
+            <span class="author-block"><sup>2</sup>XtalPi Co., Ltd.</span>,
+            <span class="author-block"><sup>3</sup>University of Washington</span>
+          </div>
+          
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- Paper Link. -->
+              <span class="link-block">
+                <a href="https://doi.org/10.1016/j.patter.2025.101371"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/IDEA-XL/LigUnity"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href="https://doi.org/10.6084/m9.figshare.27966819"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-database"></i>
+                  </span>
+                  <span>Data</span>
+                  </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-four-fifths">
+          <h2 class="title is-2">Overview</h2>
+          <div class="content has-text-left" style="font-size: 1.1rem;">
+            <ul>
+              <li>LigUnity is a unified foundation model for virtual screening and hit-to-lead optimization.</li>
+              <li>Outperforms 24 methods with >50% improvement in virtual screening.</li>
+              <li>Approaches FEP+ accuracy at far lower cost in hit-to-lead optimization.</li>
+              <li>Achieves 10<sup>6</sup> speedup compared to traditional docking methods like Glide-SP.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container is-max-desktop">
+      <div class="columns is-vcentered">
+        <div class="column is-one-quarter">
+          <img src="static/images/cover_image.jpg" alt="LigUnity Cover Image" style="border-radius: 8px;">
+        </div>
+        <div class="column is-three-quarters">
+          <div class="content has-text-justified">
+            <p>
+              <b>We are excited to announce that our paper has been accepted by Patterns and is featured as the cover article for the October 2025 issue!</b>
+            </p>
+            <p>
+              This ocean symbolizes the human proteome—the complete set of proteins that carry out essential functions in our bodies. For medicine to work, it often needs to interact with a specific protein. For an estimated 90% of these proteins, however, they lack known small-molecule ligands with high activity. In the image, these proteins are represented as sailboats drifting in the dark.
+            </p>
+            <p>
+              At the center, stands a lighthouse symbolizing the AI method LigUnity. Its beam illuminates several sailboats, guiding them toward glowing buoys, which symbolize ligands with high activity found by LigUnity. The work by Feng et al. highlights the power of AI-driven computational methods to efficiently find active ligands and optimize their activity, opening up new therapeutic avenues for various diseases.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+      <!-- Abstract. -->
+      <div class="columns is-centered has-text-centered">
+          <div class="column is-four-fifths">
+              <h2 class="title is-2">Abstract</h2>
+              <div class="content has-text-justified">
+                  <p>
+                    Structure-based drug discovery involves two critical, sequential tasks: virtual screening to identify active compounds and hit-to-lead optimization to refine their potency. Existing computational methods often treat these tasks separately due to their conflicting speed-accuracy requirements. This separation prevents the synergy that could arise from a unified approach. We introduce <b>LigUnity</b>, a protein-ligand affinity foundation model that jointly addresses both tasks. LigUnity learns a shared embedding space for protein pockets and ligands by capturing both coarse-grained active/inactive distinctions (<i>scaffold discrimination</i>) and fine-grained affinity rankings (<i>pharmacophore ranking</i>). To enable this, we curated <b>PocketAffDB</b>, the largest structure-aware affinity database to date, containing 0.8 million data points. Our evaluations show that LigUnity sets a new state-of-the-art, outperforming 24 methods in virtual screening and approaching the accuracy of costly physics-based methods like FEP+ in hit-to-lead optimization, all while being <b>10<sup>6</sup> times faster</b> than traditional docking.
+                  </p>
+              </div>
+          </div>
+      </div>
+      <!--/ Abstract. -->
+      <br>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+      <div class="columns is-centered has-text-centered">
+          <h2 class="title is-2">How LigUnity Works</h2>
+          <br>
+      </div>
+      
+      <!-- Architecture -->
+      <div class="columns is-centered">
+          <div class="column is-full-width">
+              <div class="content has-text-justified">
+                <p>
+                  LigUnity's core innovation is its hierarchical approach to learning a shared pocket-ligand embedding space. This allows it to understand both global structure-activity relationships and subtle, affinity-determining chemical features. The entire pipeline is illustrated below.
+                </p>
+                <img class="columns is-centered has-text-centered" src="static/images/figure_1.png" alt="LigUnity Overview" width="100%" style="margin:0 auto; border: 1px solid #e5e5e5; border-radius: 8px;">
+                <br>
+                <ul>
+                    <li>
+                      <b>1. Data Curation (PocketAffDB):</b> We created PocketAffDB, a structure-aware binding database by integrating large-scale affinity data from ChEMBL and BindingDB with 3D structures from the PDB. It contains 0.8 million affinity data points, 0.5 million unique ligands, and over 53,000 protein pockets.
+                    </li>
+                    <li>
+                      <b>2. Hierarchical Pre-training:</b> LigUnity is pre-trained to learn a shared embedding space where the cosine similarity between a pocket vector and a ligand vector correlates with binding affinity. This is achieved via two complementary objectives:
+                      <ul>
+                        <li><b>Scaffold Discrimination (Coarse-Grained):</b> Using contrastive learning, the model learns to distinguish active from inactive compounds by pulling embeddings of known binding pairs closer together.</li>
+                        <li><b>Pharmacophore Ranking (Fine-Grained):</b> Using a listwise ranking loss, the model learns to order a series of active ligands according to their measured binding affinity for a given pocket.</li>
+                      </ul>
+                    </li>
+                    <li>
+                      <b>3. Task-Specific Inference:</b> For downstream tasks, the model is adapted:
+                      <ul>
+                        <li><b>Virtual Screening:</b> A Heterogeneous Graph Neural Network (H-GNN) refines the query pocket's embedding by aggregating information from similar pockets and their known binders, enabling rapid and accurate screening.</li>
+                        <li><b>Hit-to-Lead Optimization:</b> The model directly ranks candidate molecules based on embedding similarity and can be fine-tuned with a few experimental data points to achieve accuracy comparable to costly physics-based methods.</li>
+                      </ul>
+                    </li>
+                </ul>
+              </div>
+              <br/>
+          </div>
+      </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+
+      <div class="columns is-centered has-text-centered">
+          <h2 class="title is-2">Results</h2>
+          <br>
+      </div>
+
+      <div class="columns is-centered">
+          <div class="column is-full-width">
+              <h3 class="title is-4">• Virtual Screening</h3>
+              <div class="content has-text-justified">
+                <p>
+                  On the DUD-E, Dekois 2.0, and LIT-PCBA benchmarks, LigUnity consistently and significantly outperforms 24 competing methods, including docking programs and other ML models. It achieves over a <b>50% improvement</b> in Enrichment Factor (EF 1%) compared to the next-best structure-based methods and shows strong generalization to novel protein targets.
+                </p>
+                <img class="columns is-centered has-text-centered" src="static/images/figure_2.png" alt="Virtual Screening Results" width="100%" style="margin:0 auto; border: 1px solid #e5e5e5; border-radius: 8px;">
+              </div>
+              <br>
+
+              <h3 class="title is-4">• Hit-to-Lead Optimization</h3>
+              <div class="content has-text-justified">
+                <p>
+                  On two FEP benchmarks (Merck and JACS), LigUnity shows state-of-the-art performance in predicting binding free energies. When fine-tuned on just a few data points, LigUnity's accuracy becomes <b>comparable to FEP+</b>, a computationally intensive industry standard, positioning it as a powerful, cost-effective alternative. Importance scores calculated by the model also correctly identify key atoms and residues responsible for binding.
+                </p>
+                <img class="columns is-centered has-text-centered" src="static/images/figure_3.png" alt="Hit-to-Lead Optimization Results" width="100%" style="margin:0 auto; border: 1px solid #e5e5e5; border-radius: 8px;">
+              </div>
+          </div>
+      </div>
+
+  </div>
+</section>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{Feng2025LigUnity,
+  title        = {Hierarchical affinity landscape navigation through learning a shared pocket-ligand space},
+  author       = {Feng, Bin and Liu, Zijing and Li, Hao and Yang, Mingjun and Zou, Junjie and Cao, He and Li, Yu and Zhang, Lei and Wang, Sheng},
+  journal      = {Patterns},
+  volume       = {6},
+  pages        = {101371},
+  year         = {2025},
+  publisher    = {Elsevier},
+  doi          = {10.1016/j.patter.2025.101371}
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="https://doi.org/10.1016/j.patter.2025.101371">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/IDEA-XL/LigUnity" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            This page was built using the source code from the <a
+              href="https://github.com/nerfies/nerfies.github.io">Nerfies project page</a>.
+            Please link back to their page if you use their template.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
