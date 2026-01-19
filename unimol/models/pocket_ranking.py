@@ -208,8 +208,8 @@ class PocketRankingModel(BaseUnicoreModel):
         pocket_rep = pocket_encoder_rep[:,0,:]
 
         # project to the input manifold
-        mol_rep = project(self.manifold, mol_rep)
-        pocket_rep = project(self.manifold, pocket_rep)
+        # mol_rep = project(self.manifold, mol_rep)
+        # pocket_rep = project(self.manifold, pocket_rep)
         # project to the latent manifolds
         mol_emb = self.mol_project(mol_rep)
         pocket_emb = self.pocket_project(pocket_rep)
@@ -231,7 +231,7 @@ class PocketRankingModel(BaseUnicoreModel):
         )
         mol_encoder_rep = mol_outputs[0][:, 0, :]
         # project to the input manifold
-        mol_encoder_rep = project(self.manifold, mol_encoder_rep)
+        # mol_encoder_rep = project(self.manifold, mol_encoder_rep)
         # project to the latent manifolds
         mol_emb = self.mol_project(mol_encoder_rep)
         return mol_emb
@@ -251,7 +251,7 @@ class PocketRankingModel(BaseUnicoreModel):
         )
         pocket_encoder_rep = pocket_outputs[0][:, 0, :]
         # project to the input manifold
-        pocket_encoder_rep = project(self.manifold, pocket_encoder_rep)
+        # pocket_encoder_rep = project(self.manifold, pocket_encoder_rep)
         pocket_emb = self.pocket_project(pocket_encoder_rep)
         return pocket_emb
 

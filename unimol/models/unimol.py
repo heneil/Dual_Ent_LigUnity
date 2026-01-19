@@ -371,9 +371,10 @@ def project(manifold, x):
     return x
 
 def normalize(manifold, x):
-    x_space = x[..., 1:]
-    x_space = x_space / (x_space.norm(dim=-1, keepdim=True).clamp_min(1e-4))
-    return project(manifold, x_space) 
+    return x
+    # x_space = x[..., 1:]
+    # x_space = x_space / (x_space.norm(dim=-1, keepdim=True).clamp_min(1e-4))
+    # return project(manifold, x_space) 
 
 def change_manifold(manifold_in, manifold_out, x):
     x = x * (manifold_out.c / manifold_in.c).sqrt()
@@ -390,27 +391,36 @@ class LorentzNonLinearHead(nn.Module):
         else:
             self.manifold_out = manifold_out
         self.activation_fn = utils.get_activation_fn(activation_fn)
-        self.layers = nn.Sequential(
-            LorentzLinear(self.manifold, input_dim+1, hidden),
-            LorentzActivation(self.manifold, activation=self.activation_fn),
-        )
-        self.project_layers = nn.ModuleList()
-        for i in range(len(self.manifold_out)):
-            self.project_layers.append(nn.Sequential(
-                LorentzLinear(self.manifold, hidden + 1, out_dim // len(self.manifold_out), manifold_out=self.manifold_out[i]),
-                ))
+        # self.layers = nn.Sequential(
+        #     nn.Linear(input_dim, hidden),
+        # )
+        # self.project_layers = nn.ModuleList()
+        # for i in range(len(self.manifold_out)):
+        #     self.project_layers.append(nn.Sequential(
+        #         LorentzLinear(self.manifold, hidden + 1, out_dim // len(self.manifold_out), manifold_out=self.manifold_out[i]),
+        #         ))
+
+        self.linear1 = nn.Linear(input_dim, hidden)
+        self.linear2 = nn.Linear(hidden, out_dim)
+        self.activation_fn = utils.get_activation_fn(activation_fn)
 
     def forward(self, x):
-        x = self.layers(x)
-        y = x
+        # x = self.activation_fn(self.layers(x))
+        # y = x
+        x = self.linear1(x)
+        x = self.activation_fn(x)
+        x = self.linear2(x)
+        y = x.reshape(-1, len(self.manifold_out), x.shape[-1] // len(self.manifold_out))
         out = []
         for i in range(len(self.entailed)):
-            if self.entailed[i]:
-                z = change_manifold(self.manifold, self.manifold_out[i], y)
-                out.append(normalize(self.manifold_out[i], self.project_layers[i](z))) 
-            else:
-                z = change_manifold(self.manifold, self.manifold_out[i], y)
-                out.append((self.project_layers[i](normalize(self.manifold_out[i], z)))) 
+            z = project(self.manifold_out[i], y[:, i, :])
+            out.append(z)
+            # if self.entailed[i]:
+            #     z = change_manifold(self.manifold, self.manifold_out[i], y)
+            #     out.append(normalize(self.manifold_out[i], self.project_layers[i](z))) 
+            # else:
+            #     z = change_manifold(self.manifold, self.manifold_out[i], y)
+            #     out.append((self.project_layers[i](normalize(self.manifold_out[i], z)))) 
         out = torch.cat(out, dim=-1)
         return out
 

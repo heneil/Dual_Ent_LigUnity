@@ -617,7 +617,7 @@ class ContrasRankTest(UnicoreTask):
         for m_idx in range(len(model.manifold_out)):
             p_i = pocket_reps[:, m_idx, :]
             m_i = mol_reps[:, m_idx, :]
-            dist = (-2 * model.manifold_out[m_idx].c.detach().cpu().numpy() - 2 * cinner_np(p_i, m_i))
+            dist = (2 * model.manifold_out[m_idx].c.detach().cpu().numpy() + 2 * cinner_np(p_i, m_i))
             res = res + dist
         res_single = res.max(axis=0)
         auc, bedroc, ef_list, re_list = cal_metrics(labels, res_single, 80.5)
@@ -743,7 +743,7 @@ class ContrasRankTest(UnicoreTask):
 
     def test_dude_target(self, target, model, seq, **kwargs):
 
-        data_path = f"{self.args.data}/DUD-E/" + target + "/mols_real.lmdb"
+        data_path = f"{self.args.data}/DUD-E/" + target + "/mols.lmdb"
         mol_dataset = self.load_mols_dataset(data_path, "atoms", "coordinates")
         num_data = len(mol_dataset)
         bsz = 64
@@ -755,7 +755,7 @@ class ContrasRankTest(UnicoreTask):
         # generate mol data
         print("begin with target:", target)
         print("number of mol:", len(mol_dataset))
-        mol_data = torch.utils.data.DataLoader(mol_dataset, batch_size=bsz, num_workers=8,
+        mol_data = torch.utils.data.DataLoader(mol_dataset, batch_size=bsz, num_workers=0,
                                                collate_fn=mol_dataset.collater)
 
         for _, sample in enumerate(tqdm(mol_data)):
@@ -787,7 +787,7 @@ class ContrasRankTest(UnicoreTask):
         for m_idx in range(len(model.manifold_out)):
             p_i = pocket_reps[:, m_idx, :]
             m_i = mol_reps[:, m_idx, :]
-            dist = (-2 * model.manifold_out[m_idx].c.detach().cpu().numpy() - 2 * cinner_np(p_i, m_i))
+            dist = (2 * model.manifold_out[m_idx].c.detach().cpu().numpy() + 2 * cinner_np(p_i, m_i))
             res = res + dist
 
         res_single = res.max(axis=0)
@@ -804,7 +804,7 @@ class ContrasRankTest(UnicoreTask):
 
     def test_dude_target_regression(self, target, model, seq, **kwargs):
 
-        data_path = f"{self.args.data}/DUD-E/" + target + "/mols_real.lmdb"
+        data_path = f"{self.args.data}/DUD-E/" + target + "/mols.lmdb"
         mol_dataset = self.load_mols_dataset(data_path, "atoms", "coordinates")
         num_data = len(mol_dataset)
         bsz = 64
@@ -953,7 +953,7 @@ class ContrasRankTest(UnicoreTask):
         for m_idx in range(len(model.manifold_out)):
             p_i = pocket_reps[:, m_idx, :]
             m_i = mol_reps[:, m_idx, :]
-            dist = (-2 * model.manifold_out[m_idx].c.detach().cpu().numpy() - 2 * cinner_np(p_i, m_i))
+            dist = (2 * model.manifold_out[m_idx].c.detach().cpu().numpy() + 2 * cinner_np(p_i, m_i))
             res = res + dist
 
         res_single = res.max(axis=0)
@@ -1152,7 +1152,7 @@ class ContrasRankTest(UnicoreTask):
         for m_idx in range(len(model.manifold_out)):
             p_i = pocket_reps[:, m_idx, :]
             m_i = mol_reps[:, m_idx, :]
-            dist = (-2 * model.manifold_out[m_idx].c.detach().cpu().numpy() - 2 * cinner_np(p_i, m_i))
+            dist = (2 * model.manifold_out[m_idx].c.detach().cpu().numpy() + 2 * cinner_np(p_i, m_i))
             res = res + dist
 
         res_single = res.max(axis=0)
