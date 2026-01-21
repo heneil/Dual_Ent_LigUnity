@@ -1,4 +1,4 @@
-data_path="/ext/nhe/with_sample_packing/L_hyp/data"
+data_path="..."
 
 save_root="./save"
 save_name="screen_pocket"
@@ -8,8 +8,8 @@ tsb_dir="${save_root}/${save_name}/tsb_dir_screen"
 mkdir -p ${save_dir}
 n_gpu=2
 MASTER_PORT=10062
-finetune_mol_model="/ext/nhe/with_sample_packing/L_hyp/Uni-Mol-Models/mol_pre_no_h_220816.pt" # unimol pretrained mol model
-finetune_pocket_model="/ext/nhe/with_sample_packing/L_hyp/Uni-Mol-Models/pocket_pre_220816.pt" # unimol pretrained pocket model
+finetune_mol_model=".../mol_pre_no_h_220816.pt" # unimol pretrained mol model, should be the mol_pre_no_h_220816.pt model
+finetune_pocket_model=".../pocket_pre_220816.pt" # unimol pretrained pocket model, should be the pocket_pre_220816.pt model
 
 
 batch_size=24
