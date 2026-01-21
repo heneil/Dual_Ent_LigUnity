@@ -84,26 +84,26 @@ class RSLoss(UnicoreLoss):
                         dist = (2 * model.manifold_out[m_idx].c + 2 * model.manifold_out[m_idx].cinner(p_i, m_i))
                         logit_output = logit_output + dist
                         entailment_l = 0.0
-                        # # compute the entailement loss
-                        # for i in range(p_emb.size(0)):
-                        #     start_i, end_i = batch_list[i]
-                        #     if start_i >= end_i:
-                        #         continue
-                        #     m_vecs = m_i[start_i:end_i]          # [n_i, d_sub]
-                        #     if m_vecs.size(0) == 0:
-                        #         continue
-                        #     p_vec = p_i[i].unsqueeze(0).expand_as(m_vecs)
-                        #     if model.entailed[m_idx]:
-                        #         # pocket -> ligand manifold: ligands should lie inside cone of pocket
-                        #         theta = model.manifold_out[m_idx].oxy_angle(p_vec, m_vecs)      # [n_i]
-                        #         half = model.manifold_out[m_idx].half_aperture(p_vec)          # [n_i] or [1]
-                        #         loss_i = (theta - half).clamp(min=0).mean()
-                        #     else:
-                        #         # ligand -> pocket manifold: pocket inside cone of each ligand
-                        #         theta = model.manifold_out[m_idx].oxy_angle(m_vecs, p_vec)      # [n_i]
-                        #         half = model.manifold_out[m_idx].half_aperture(m_vecs)         # [n_i] or [1]
-                        #         loss_i = (theta - half).clamp(min=0).mean()
-                        #     entailment_l = entailment_l + loss_i
+                        # compute the entailement loss
+                        for i in range(p_emb.size(0)):
+                            start_i, end_i = batch_list[i]
+                            if start_i >= end_i:
+                                continue
+                            m_vecs = m_i[start_i:end_i]          # [n_i, d_sub]
+                            if m_vecs.size(0) == 0:
+                                continue
+                            p_vec = p_i[i].unsqueeze(0).expand_as(m_vecs)
+                            if model.entailed[m_idx]:
+                                # pocket -> ligand manifold: ligands should lie inside cone of pocket
+                                theta = model.manifold_out[m_idx].oxy_angle(p_vec, m_vecs)      # [n_i]
+                                half = model.manifold_out[m_idx].half_aperture(p_vec, min_radius=0.05)          # [n_i] or [1]
+                                loss_i = (theta - half).clamp(min=0).mean()
+                            else:
+                                # ligand -> pocket manifold: pocket inside cone of each ligand
+                                theta = model.manifold_out[m_idx].oxy_angle(m_vecs, p_vec)      # [n_i]
+                                half = model.manifold_out[m_idx].half_aperture(m_vecs, min_radius=0.05)         # [n_i] or [1]
+                                loss_i = (theta - half).clamp(min=0).mean()
+                            entailment_l = entailment_l + loss_i
 
                     logit_output = logit_output * model.logit_scale.exp().detach()
                     entailment_l = entailment_l / len(model.manifold_out)

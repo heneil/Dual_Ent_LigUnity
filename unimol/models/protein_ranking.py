@@ -133,6 +133,7 @@ class ProteinRankingModel(BaseUnicoreModel):
         """Build a new model instance."""
         manifold_in = Lorentz(c=args.c_in, learnable=False)
         manifold_out = []
+        # args.entailed = [1]
         for i in range(len(args.c_out)):
             manifold_out.append(Lorentz(c=args.c_out[i], learnable=args.learnable_curv))
         entailed = args.entailed
