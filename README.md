@@ -22,6 +22,12 @@ wget --content-disposition "https://ndownloader.figshare.com/articles/27966819/v
 ```
 inside the deisred data directory. Then unzip the ***.zip*** files in the downloaded folder, e.g. ***unzip TIME.zip***
 
+Test data (for DUD-E and PCBA) can be get through the command
+```
+gdown "https://drive.google.com/drive/folders/1zW1MGpgunynFxTKXC2Q4RgWxZmg6CInV"   --folder -O test_datasets
+```
+Unzip the corresponding zip files and move them to the ***test_datasets*** folder. Then, for the DUD-E data, move all of them out of the raw/all folders and directly into the DUD-E folder. 
+
 ## Experiments & Instructionss
 To train the model, first change the ***data_path, finetune_mol_model, finetune_pocket_model*** attributes in the ***train.sh*** file to the approriate locations of the downloaded training dataset and Uni-Mol models.
 
