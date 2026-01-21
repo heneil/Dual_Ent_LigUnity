@@ -28,7 +28,7 @@ To train the model, first change the ***data_path, finetune_mol_model, finetune_
 Then the experiment can be simply run with 
 
 ```
-train.sh
+bash train.sh
 ```
 
 Please train two baselines:
