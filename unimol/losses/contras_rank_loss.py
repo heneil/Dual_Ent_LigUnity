@@ -144,6 +144,9 @@ class RSLoss(UnicoreLoss):
             else:
                 sample_size = logit_output.size(0)
                 targets = torch.arange(sample_size, dtype=torch.long).cuda()
+                if logit_output.size(1) != sample_size:
+                    m = min(logit_output.size(1), sample_size)
+                    logit_output = logit_output[:m, :m]
                 assert logit_output.size(1) == sample_size
                 logit_output = logit_output[:, :sample_size]
                 probs = F.softmax(logit_output.float(), dim=-1).view(

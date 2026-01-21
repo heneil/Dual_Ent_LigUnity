@@ -37,12 +37,12 @@ CUDA_VISIBLE_DEVICES="1,2" python -m torch.distributed.launch --nproc_per_node=$
        --tensorboard-logdir $tsb_dir \
        --log-interval 100 --log-format simple \
        --validate-interval 1 \
-       --best-checkpoint-metric valid_mean_r2 --patience 2000 --all-gather-list-size 2048000 \
+       --best-checkpoint-metric valid_bedroc --patience 2000 --all-gather-list-size 2048000 \
        --save-dir $save_dir --tmp-save-dir $tmp_save_dir --keep-best-checkpoints 8 --keep-last-epochs 10 \
        --find-unused-parameters \
        --maximize-best-checkpoint-metric \
        --finetune-pocket-model $finetune_pocket_model \
        --finetune-mol-model $finetune_mol_model \
-       --valid-set TIME \
+       --valid-set CASF \
        --max-lignum 16 \
        --protein-similarity-thres 1.0 > ${save_root}/train_log/train_log_${save_name}.txt
