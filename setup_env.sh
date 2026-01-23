@@ -1,5 +1,7 @@
 python3.10 -m venv l_core
 source l_core/bin/activate
+# conda create -n l_core python=3.10 -y
+# conda activate l_core
 pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu124
 pip install torch_geometric
 pip install pyg_lib torch_scatter torch_sparse torch_cluster torch_spline_conv -f https://data.pyg.org/whl/torch-2.6.0+cu124.html
@@ -10,3 +12,4 @@ pip install rdkit
 git clone https://github.com/dptech-corp/Uni-Core.git
 cd Uni-Core
 python setup.py install
+pip install lmdb

@@ -1,4 +1,6 @@
-data_path="..."
+data_path=$DATA_PATH
+
+mkdir -p ./save/train_log
 
 save_root="./save"
 save_name="screen_pocket"
@@ -6,10 +8,12 @@ save_dir="${save_root}/${save_name}/savedir_screen"
 tmp_save_dir="${save_root}/${save_name}/tmp_save_dir_screen"
 tsb_dir="${save_root}/${save_name}/tsb_dir_screen"
 mkdir -p ${save_dir}
-n_gpu=2
+n_gpu=$(echo "$CUDA_VISIBLE_DEVICES" | tr ',' '\n' | wc -l)
+echo "CUDA_VISIBLE_DEVICES: $CUDA_VISIBLE_DEVICES"
+echo "n_gpu: $n_gpu"
 MASTER_PORT=10062
-finetune_mol_model=".../mol_pre_no_h_220816.pt" # unimol pretrained mol model, should be the mol_pre_no_h_220816.pt model
-finetune_pocket_model=".../pocket_pre_220816.pt" # unimol pretrained pocket model, should be the pocket_pre_220816.pt model
+finetune_mol_model="${CKPT_PATH}/mol_pre_no_h_220816.pt" # unimol pretrained mol model, should be the mol_pre_no_h_220816.pt model
+finetune_pocket_model="${CKPT_PATH}/pocket_pre_220816.pt" # unimol pretrained pocket model, should be the pocket_pre_220816.pt model
 
 
 batch_size=24
@@ -27,7 +31,7 @@ export OMP_NUM_THREADS=1
 export TORCH_DISTRIBUTED_DEBUG=DETAIL
 export NCCL_DEBUG=INFO
 export NCCL_BLOCKING_WAIT=1
-CUDA_VISIBLE_DEVICES="1,2" python -m torch.distributed.launch --nproc_per_node=$n_gpu --master_port=$MASTER_PORT --use_env $(which unicore-train) $data_path --user-dir ./unimol --train-subset train --valid-subset valid \
+python -m torch.distributed.launch --nproc_per_node=$n_gpu --master_port=$MASTER_PORT --use_env $(which unicore-train) $data_path --user-dir ./unimol --train-subset train --valid-subset valid \
        --num-workers 0 --ddp-backend=c10d \
        --task train_task --loss rank_softmax --arch pocket_ranking  \
        --max-pocket-atoms 256 \
